@@ -26,12 +26,11 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         //클라이언트 요청에서 username, password 추출
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
+        String nickname = request.getParameter("nickname");
+        String password = request.getParameter("password");
 
         //스프링 시큐리티에서 username과 password를 검증하기 위해서는 token에 담아야 한다.
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password, null);
-        System.out.println(username);
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(nickname, password, null);
 
         //토큰에 담은 검증을 위한 AuthenticationManager로 전달
         return authenticationManager.authenticate(authToken);
@@ -42,15 +41,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         //UserDetailsS
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        String username = customUserDetails.getUsername();
+        Integer id = customUserDetails.getId();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
 
-        String role = auth.getAuthority();
+        String role = auth.getAuthority();      String token = jwtUtil.createJwt(id, role, 24 * 60 * 60 * 1000L);
 
-        String token = jwtUtil.createJwt(username, role, 60*60*10L);
+
 
         response.addHeader("Authorization", "Bearer " + token);
     }

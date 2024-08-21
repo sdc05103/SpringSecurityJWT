@@ -60,10 +60,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/join").permitAll()
-                        .requestMatchers("/admin").hasRole("ADMIN")
+//                        .requestMatchers("/admin").hasRole("USER")
                         .anyRequest().authenticated());
 
         //커스텀한 새로운 필터 추가
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
         //인자를 받는데 AuthenticationManager() 메소드에 authenticationConfiguration 객체 추가
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);

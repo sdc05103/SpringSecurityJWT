@@ -20,7 +20,6 @@ public class JWTFilter extends OncePerRequestFilter {
         this.jwtUtil = jwtUtil;
     }
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -43,15 +42,13 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        //토큰에서 username, role 획득
-        String username = jwtUtil.getUsername(token);
-        String role = jwtUtil.getRole(token);
+        //토큰에서 username 획득
+        String nickname = jwtUtil.getNickname(token);
 
         //userEntity를 생성해 값을 setting, 비밀번호엔 아무거나
         UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(username);
+        userEntity.setNickname(nickname);
         userEntity.setPassword("temppassword");
-        userEntity.setRole(role);
 
         //userDetails에 회원 정보 객체 담기
         CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);

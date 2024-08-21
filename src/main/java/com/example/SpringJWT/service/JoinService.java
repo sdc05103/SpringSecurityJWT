@@ -18,20 +18,19 @@ public class JoinService {
 
     public void joinProcess(JoinDTO joinDTO){
 
-        String username = joinDTO.getUsername();
+        String nickname = joinDTO.getNickname();
         String password = joinDTO.getPassword();
 
-        Boolean isExist = userRepository.existsByUsername(username);
+        Boolean isExist = userRepository.existsByNickname(nickname);
         if (isExist){
             return;
         }
 
         UserEntity data = new UserEntity();
 
-        data.setUsername(username);
+        data.setNickname(nickname);
         data.setPassword(bCryptPasswordEncoder.encode(password));
-        data.setRole("ROLE_ADMIN");
-
+        data.setRole("ROLE_USER");
         userRepository.save(data);
 
     }
