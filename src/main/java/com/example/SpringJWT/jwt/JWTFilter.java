@@ -1,7 +1,5 @@
 package com.example.SpringJWT.jwt;
 
-import com.example.SpringJWT.DTO.CustomUserDetails;
-import com.example.SpringJWT.entity.UserEntity;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,8 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import java.util.List;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -42,19 +42,21 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        //토큰에서 username 획득
-        String nickname = jwtUtil.getNickname(token);
+        Integer id = jwtUtil.getId(token);
+        String role = jwtUtil.getRole(token);
 
+        JWTTmp jwtTmp = new JWTTmp(id, role);
         //userEntity를 생성해 값을 setting, 비밀번호엔 아무거나
-        UserEntity userEntity = new UserEntity();
-        userEntity.setNickname(nickname);
-        userEntity.setPassword("temppassword");
+//        UserEntity userEntity = new UserEntity();
+//        userEntity.setNickname(nickname);
+//        userEntity.setPassword("temppassword");
+//        userEntity.setRole(role);
 
         //userDetails에 회원 정보 객체 담기
-        CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
+//        CustomUserDetails customUserDetails = new CustomUserDetails(userEntity);
 
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-
+        Authentication authToken = new UsernamePasswordAuthenticationToken(jwtTmp, null, List.of(new SimpleGrantedAuthority(role)));
+        System.out.println(authToken);
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request,response);

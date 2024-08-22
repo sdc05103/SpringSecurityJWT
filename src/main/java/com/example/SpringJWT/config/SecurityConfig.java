@@ -52,15 +52,11 @@ public class SecurityConfig {
         http
                 .httpBasic((auth) -> auth.disable());
 
-        //JWTFilter 등록
-        http
-                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-
         //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/login", "/", "/join").permitAll()
-//                        .requestMatchers("/admin").hasRole("USER")
+                        .requestMatchers("/admin").hasRole("USER")
                         .anyRequest().authenticated());
 
         //커스텀한 새로운 필터 추가
