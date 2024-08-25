@@ -1,6 +1,6 @@
 package com.example.SpringJWT.DTO;
 
-import com.example.SpringJWT.entity.UserEntity;
+import com.example.SpringJWT.entity.Traveler;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,10 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final UserEntity userEntity;
+    private final Traveler traveler;
 
-    public CustomUserDetails(UserEntity userEntity){
-        this.userEntity = userEntity;
+    public CustomUserDetails(Traveler traveler){
+        this.traveler = traveler;
     }
 
     @Override
@@ -20,7 +20,7 @@ public class CustomUserDetails implements UserDetails {
         collection.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return userEntity.getRole();
+                return traveler.getRole();
             }
         });
 
@@ -29,16 +29,16 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userEntity.getPassword();
+        return traveler.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userEntity.getNickname();
+        return traveler.getNickname();
     }
 
     public Integer getId() {
-        return userEntity.getId();
+        return traveler.getId();
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.example.SpringJWT.service;
 
 import com.example.SpringJWT.DTO.CustomUserDetails;
-import com.example.SpringJWT.entity.UserEntity;
-import com.example.SpringJWT.repository.UserRepository;
+import com.example.SpringJWT.entity.Traveler;
+import com.example.SpringJWT.repository.TravelerRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,16 +10,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final TravelerRepository travelerRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository){
-        this.userRepository = userRepository;
+    public CustomUserDetailsService(TravelerRepository travelerRepository){
+        this.travelerRepository = travelerRepository;
     }
     @Override
     public UserDetails loadUserByUsername(String nickname) throws UsernameNotFoundException {
 
 
-        UserEntity userData = userRepository.findByNickname(nickname);
+        Traveler userData = travelerRepository.findByNickname(nickname);
         System.out.println(nickname);
 
         if(userData != null){

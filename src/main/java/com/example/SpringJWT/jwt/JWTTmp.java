@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class JWTTmp {
 
-    private final Integer id;
+    private final long id;
     private final String role;
 
 }
